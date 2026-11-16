@@ -1,0 +1,62 @@
+version: "2"
+
+run:
+  timeout: 5m
+  tests: true
+  modules-download-mode: readonly
+
+linters:
+  default: all
+  disable:
+    # Use their maintained replacements instead of running duplicate old cops.
+    - cyclop
+    - gocyclo
+    - lll
+    - exhaustruct
+    - exhaustruct_v5
+    - gomodguard
+    - varnamelen
+    - revive
+    - exhaustive
+    - mnd
+    - funlen
+    - wsl
+    # Requires a project-specific import allow/deny policy; none is defined.
+    - depguard
+    # Inline error handling is idiomatic and allowed in this project.
+    - noinlineerr
+    - wrapcheck
+    - testpackage
+  settings:
+    tagliatelle:
+      case:
+        rules:
+          json: snake
+    errcheck:
+      check-type-assertions: true
+      check-blank: true
+      disable-default-exclusions: true
+    govet:
+      enable-all: true
+    staticcheck:
+      checks:
+        - all
+    gocritic:
+      enabled-tags:
+        - diagnostic
+        - style
+        - performance
+        - opinionated
+    nolintlint:
+      require-explanation: true
+      require-specific: true
+  exclusions:
+    generated: disable
+    presets: []
+    rules: []
+    warn-unused: true
+
+issues:
+  max-issues-per-linter: 0
+  max-same-issues: 0
+  uniq-by-line: false

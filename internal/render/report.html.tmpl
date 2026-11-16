@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Go type report</title>
+<style>/* REPORT_STYLES */</style>
+</head>
+<body>
+<header class="page-header">
+<div class="report-heading"><span class="report-mark" aria-hidden="true">{ }</span><h1>Go type report</h1></div>
+<div id="controls" hidden>
+<label for="search">Search types, fields, methods, or files</label>
+<div class="search-row"><input id="search" type="search" placeholder="Search types, fields, methods, or files…" autocomplete="off" aria-controls="report-content toc"><button id="clear" type="button">Clear</button></div>
+<div class="filters" role="group" aria-label="Type filter">
+<button type="button" data-filter="all" aria-pressed="true">All</button>
+{{range .Sections}}<button type="button" data-filter="{{.Kind}}" aria-pressed="false">{{.Title}} <span class="filter-count">{{.Count}}</span></button>{{end}}
+</div>
+<p id="result-count" role="status" aria-live="polite" aria-atomic="true"></p>
+</div>
+</header>
+<div class="layout">
+<nav id="toc" aria-label="Table of contents">
+<h2>Contents</h2>
+<a href="#package-dependencies" class="package-link">Package dependencies</a>
+<a href="#declarations" class="package-link">Declarations &amp; signatures</a>
+<div id="tree-controls" class="tree-controls" role="group" aria-label="Source tree" hidden><button id="tree-expand" type="button">Expand all</button><button id="tree-collapse" type="button">Collapse all</button></div>
+<div class="source-tree">{{with .Tree}}{{template "tree-node" .}}{{else}}<p class="location">No types found.</p>{{end}}</div>
+</nav>
+<main id="report-content">
+{{if not .HasPackages}}<p>No Go packages found.</p>{{end}}
+<p id="no-results" hidden>No matching types. Clear the search or change the type filter.</p>
+{{range .Sections}}{{$kind := .Kind}}
+<section data-type-section="{{.Kind}}" aria-labelledby="{{.Kind}}s">
+<h2 id="{{.Kind}}s">{{.Title}} <span class="badge">{{.Count}}</span></h2>
+{{if not .Packages}}<p class="empty-section">None.</p>{{end}}
+{{range .Packages}}{{fragment .Content}}{{end}}
+</section>
+{{end}}
+<section id="package-dependencies" aria-labelledby="package-dependencies-title">
+<h2 id="package-dependencies-title">Package dependencies <span class="badge">{{len .Packages}}</span></h2>
+{{range .DependencyPackages}}{{fragment .}}{{end}}
+</section>
+<section id="declarations" aria-labelledby="declarations-title">
+<h2 id="declarations-title">Declarations &amp; signatures</h2>
+{{range .DeclarationPackages}}{{fragment .}}{{end}}</section>
+</main>
+</div>
+<script>/* REPORT_SCRIPT */</script>
+</body>
+</html>
+{{define "type-package"}}{{$kind := .Kind}}
+<section data-package>
+<h3>Package {{.Name}}</h3>
+<p class="location directory" title="{{.Directory}}">{{.Directory}}</p>
+{{range .Types}}
+<article id="{{.ID}}" data-kind="{{$kind}}" tabindex="-1" aria-labelledby="{{.ID}}-name">
+<div class="type-heading"><h4 id="{{.ID}}-name"><a href="#{{.ID}}">{{.Name}}</a></h4><span class="kind-label {{$kind}}">{{$kind}}</span></div>
+<p class="location definition" title="{{.File}}:{{.Line}}"><code>{{filename .File}}:{{.Line}}</code></p>
+<dl class="type-stats">
+{{if eq $kind "struct"}}<div><dt>Fields</dt><dd>{{.FieldCount}}</dd></div>{{end}}
+<div><dt>Methods</dt><dd>{{.MethodCount}}</dd></div>
+{{if eq $kind "struct"}}<div><dt>Public</dt><dd>{{.PublicMethodCount}}</dd></div><div><dt>Private</dt><dd>{{.PrivateMethodCount}}</dd></div>{{end}}
+</dl>
+{{if .EmbeddedTypes}}<ul class="embedded-types">{{range .EmbeddedTypes}}<li>{{if eq $kind "struct"}}Embeds{{else}}Embeds / constrains{{end}} <code>{{.}}</code></li>{{end}}</ul>{{end}}
+{{if .Fields}}<details class="methods fields"><summary>Field declarations <span class="badge">{{.FieldCount}}</span></summary><ul>{{range .Fields}}
+<li><div class="method-signature"><code>{{if not .Embedded}}{{.Name}} {{end}}{{.Type}}{{if .Tag}} {{printf "`%s`" .Tag}}{{end}}</code><span class="visibility {{if .Exported}}public{{else}}private{{end}}">{{if .Exported}}public{{else}}private{{end}}</span></div><span class="location method-location" title="{{.File}}:{{.Line}}">{{filename .File}}:{{.Line}}{{if .TypePackage}} · {{.TypePackage}}{{end}}</span></li>
+{{end}}</ul></details>{{end}}
+{{if .Methods}}<details class="methods" open><summary>Method declarations <span class="badge">{{.MethodCount}}</span></summary><ul>{{range .Methods}}
+<li><div class="method-signature"><code class="function-signature" tabindex="0" aria-label="Method signature">{{methodSignature .Declaration}}</code>{{if eq $kind "struct"}}<span class="visibility {{if .Exported}}public{{else}}private{{end}}">{{if .Exported}}public{{else}}private{{end}}</span>{{end}}</div><span class="location method-location" title="{{.File}}:{{.Line}}">{{filename .File}}:{{.Line}}</span></li>
+{{end}}</ul></details>{{end}}
+</article>
+{{end}}
+</section>
+{{end}}
+{{define "dependency-package"}}<section class="dependency-package">
+<h3>{{.Name}}</h3><p class="location directory">{{.Directory}}</p>
+<details class="imports"><summary>Direct imports <span class="badge">{{len .Dependencies}}</span></summary>
+{{if not .Dependencies}}<p>None.</p>{{end}}<ul>{{range .Dependencies}}<li><code>{{.}}</code></li>{{end}}</ul></details>
+{{if .Imports}}<details class="imports"><summary>Import declarations</summary><ul>{{range .Imports}}<li><code>{{if .Alias}}{{.Alias}} {{end}}{{printf "%q" .Path}}</code><span class="location method-location" title="{{.File}}:{{.Line}}">{{filename .File}}:{{.Line}}</span></li>{{end}}</ul></details>{{end}}
+</section>{{end}}
+{{define "declaration-package"}}<section class="dependency-package"><h3>{{.Name}}</h3><p class="location directory">{{.Directory}}</p>
+<details class="imports"><summary>All named types and aliases <span class="badge">{{len .Types}}</span></summary><ul>{{range .Types}}<li><code>{{.Declaration}}</code><span class="location method-location" title="{{.File}}:{{.Line}}">{{filename .File}}:{{.Line}}</span>
+{{if .References}}<details><summary>Type references</summary><ul>{{range .References}}<li><code>{{if .Package}}{{.Package}}.{{end}}{{.Name}}</code> <span class="location">{{.Relation}}</span></li>{{end}}</ul></details>{{end}}</li>{{end}}</ul></details>
+<details class="imports"><summary>Functions and methods <span class="badge">{{len .Functions}}</span></summary><ul>{{range .Functions}}<li><code class="function-signature" tabindex="0" aria-label="Function signature">{{singleLineSignature .Declaration}}</code><span class="location method-location" title="{{.File}}:{{.Line}}">{{.Kind}} · {{filename .File}}:{{.Line}}</span><ul>
+{{range .TypeParameters}}<li>Type parameter {{.Position}} <code>{{.Name}} {{.Type}}</code></li>{{end}}
+{{range .Parameters}}<li>Parameter {{.Position}} <code>{{.Name}} {{.Type}}</code>{{if .Variadic}} (variadic){{end}}</li>{{end}}
+{{range .Results}}<li>Result {{.Position}} <code>{{.Name}} {{.Type}}</code></li>{{end}}</ul></li>{{end}}</ul></details>
+<details class="imports"><summary>Constants and variables <span class="badge">{{len .Values}}</span></summary><ul>{{range .Values}}<li><code>{{.Declaration}}</code><span class="location method-location" title="{{.File}}:{{.Line}}">{{.Name}} · {{filename .File}}:{{.Line}}{{if .Inherited}} · inherited expression{{end}}</span>{{if .Initializer}}<p>Initializer: <code>{{.Initializer}}</code></p>{{end}}</li>{{end}}</ul></details>
+</section>{{end}}
+{{define "tree-node"}}
+<details class="tree-node tree-{{.Kind}}" data-tree-node title="{{.Path}}"{{if .Open}} open{{end}}>
+<summary><span class="tree-icon" aria-hidden="true"></span><span class="tree-name">{{.Name}}</span><span class="badge" data-tree-count>{{.Count}}</span></summary>
+<ul class="tree-children">{{range .Children}}<li>{{template "tree-node" .}}</li>{{end}}{{range .Entries}}<li data-toc-entry="{{.ID}}"><a href="#{{.ID}}" title="{{.Package}}.{{.Name}} ({{.Kind}})"><span class="type-icon {{.Kind}}" aria-hidden="true">{{if eq .Kind "struct"}}S{{else}}I{{end}}</span><span class="tree-name">{{.Name}}</span><span class="sr-only"> ({{.Kind}}, package {{.Package}})</span></a></li>{{end}}</ul>
+</details>
+{{end}}

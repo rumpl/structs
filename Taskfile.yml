@@ -1,0 +1,81 @@
+version: '3'
+
+dir: '{{.TASKFILE_DIR}}'
+
+vars:
+  BINARY: '{{.TASKFILE_DIR}}/bin/structs'
+  INSTALL_DIR: '{{.HOME}}/bin'
+
+tasks:
+  default:
+    desc: List available tasks
+    cmds:
+      - task --list
+
+  build:
+    desc: Build bin/structs
+    cmds:
+      - mkdir -p bin
+      - go build -o '{{.BINARY}}' ./cmd/structs
+
+  install:
+    desc: Build and symlink structs into ~/bin
+    cmds:
+      - task: build
+      - |
+        set -eu
+        destination='{{.INSTALL_DIR}}/structs'
+        target='{{.BINARY}}'
+        mkdir -p '{{.INSTALL_DIR}}'
+        if [ -L "$destination" ] && [ "$(readlink "$destination")" = "$target" ]; then
+          exit 0
+        fi
+        if [ -e "$destination" ] || [ -L "$destination" ]; then
+          printf 'Refusing to replace %s: another file or symlink exists\n' "$destination" >&2
+          exit 1
+        fi
+        ln -s "$target" "$destination"
+
+  test:
+    desc: Run Go race tests and vet
+    cmds:
+      - go test -race ./...
+      - go vet ./...
+
+  lint:
+    desc: Run rubocop-go and golangci-lint
+    deps:
+      - lint:rubocop
+      - lint:golangci
+
+  lint:golangci:
+    desc: Run golangci-lint v2.15.0 with all applicable linters
+    cmds:
+      - go run github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.15.0 run --config '{{.TASKFILE_DIR}}/.golangci.yml' ./...
+
+  lint:rubocop:
+    desc: Run all rubocop-go v1.3.0 cops (requires Go 1.26.1+)
+    cmds:
+      - |
+        set -eu
+        diagnostics=$(mktemp)
+        trap 'rm -f "$diagnostics"' EXIT
+        status=0
+        go run github.com/dgageot/rubocop-go@v1.3.0 '{{.TASKFILE_DIR}}/cmd' '{{.TASKFILE_DIR}}/internal' 2>"$diagnostics" || status=$?
+        cat "$diagnostics" >&2
+        if grep -q 'whole-program analysis skipped:' "$diagnostics"; then
+          printf 'Lint failed: whole-program cops could not run\n' >&2
+          exit 1
+        fi
+        exit "$status"
+
+  fmt:
+    desc: Format Go code with gofumpt and format-structs
+    preconditions:
+      - sh: command -v gofumpt >/dev/null 2>&1
+        msg: Install gofumpt and ensure it is on PATH
+      - sh: command -v format-structs >/dev/null 2>&1
+        msg: Install format-structs and ensure it is on PATH
+    cmds:
+      - gofumpt -w .
+      - format-structs .

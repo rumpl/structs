@@ -1,0 +1,102 @@
+# Every cop shipped by github.com/dgageot/rubocop-go v1.3.0.
+# Keep this list in sync with cops.Catalog() when updating the pinned version.
+# Version-gated cops run when applicable to this module's Go version.
+default_cops: false
+
+cops:
+  Lint/BenchmarkLoop:
+    enabled: true
+  Lint/CancellationLoop:
+    enabled: true
+  Lint/CancellationSafeResultSend:
+    enabled: true
+  Lint/ChannelStateCheck:
+    enabled: true
+  Lint/CloneCompleteness:
+    enabled: true
+  Lint/ClosedChannelLoop:
+    enabled: true
+  Lint/ConstructorCommandExec:
+    enabled: true
+  Lint/ConstructorNetworkIO:
+    enabled: true
+  Lint/ConstructorPurity:
+    enabled: true
+  Lint/ContextConnectivity:
+    enabled: true
+  Lint/ContextFirstParameter:
+    enabled: true
+  Lint/CutPrefix:
+    enabled: true
+  Lint/CutSuffix:
+    enabled: true
+  Lint/DeferMutexUnlock:
+    enabled: true
+  Lint/ErrorStringMatching:
+    enabled: true
+  Lint/ErrorsAsType:
+    enabled: true
+  Lint/FieldsSeq:
+    enabled: true
+  Lint/FieldsSeqLookup:
+    enabled: true
+  Lint/FmtPrint:
+    enabled: true
+  Lint/HTTPRequestWithContext:
+    enabled: true
+  Lint/HTTPTestRequestWithContext:
+    enabled: true
+  Lint/JSONMarshalWrite:
+    enabled: true
+  Lint/MapsClone:
+    enabled: true
+  Lint/MapsCopy:
+    enabled: true
+  Lint/NewExpr:
+    enabled: true
+  Lint/NoContextField:
+    enabled: true
+  Lint/NoFatalOutsideMain:
+    enabled: true
+  Lint/NoStdoutInLibraries:
+    enabled: true
+  Lint/NonblockingChannelReplacement:
+    enabled: true
+  Lint/OsExit:
+    enabled: true
+  Lint/PointerHelper:
+    enabled: true
+  Lint/ReflectFields:
+    enabled: true
+  Lint/SlicesClone:
+    enabled: true
+  Lint/SlicesConcat:
+    enabled: true
+  Lint/SlicesContains:
+    enabled: true
+  Lint/SlicesEqual:
+    enabled: true
+  Lint/SlogContextual:
+    enabled: true
+  Lint/SortStableFunc:
+    enabled: true
+  Lint/SortedMapKeys:
+    enabled: true
+  Lint/SplitSeq:
+    enabled: true
+  Lint/SplitTrimJoin:
+    enabled: true
+  Lint/StdlibUUID:
+    enabled: true
+  Lint/StreamCloseSafety:
+    enabled: true
+  Lint/URLClone:
+    enabled: true
+  Lint/WaitGroupGo:
+    enabled: true
+  Lint/WrapErrors:
+    enabled: true
+  Style/EmptyFunc:
+    enabled: true
+  Style/ErrorNaming:
+    enabled: true

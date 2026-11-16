@@ -1,0 +1,13 @@
+/bin/
+/report.json
+/report.md
+/report.html
+
+# Test and profiling artifacts
+*.test
+*.prof
+/coverage.out
+/coverage.html
+
+# macOS
+.DS_Store

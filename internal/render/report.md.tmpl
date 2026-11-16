@@ -1,0 +1,71 @@
+# Go type report
+{{if not .Packages}}
+No Go packages found.
+{{end}}{{range .Packages}}
+## Package {{heading .Name}}
+
+Directory: {{code .Directory}}
+
+### Dependencies
+{{if not .Dependencies}}
+None.
+{{end}}{{range .Dependencies}}
+- {{code .}}
+{{end}}{{if .Imports}}
+#### Import declarations
+{{range .Imports}}
+- {{if .Alias}}{{code .Alias}} {{end}}{{code .Path}} — {{code .File}}:{{.Line}}
+{{end}}{{end}}
+
+### Structs
+{{if not .Structs}}
+None.
+{{end}}{{range .Structs}}
+#### {{heading .Name}}
+
+Defined at {{code .File}}:{{.Line}}
+
+Fields: **{{.FieldCount}}**
+{{range .Fields}}
+- {{if not .Embedded}}{{code .Name}} {{end}}{{code .Type}}{{if .Tag}}; tag: {{code .Tag}}{{end}} — {{if .Exported}}public{{else}}private{{end}}{{if .Embedded}}, embedded{{end}}; {{code .File}}:{{.Line}}{{if .TypePackage}}; package: {{code .TypePackage}}{{end}}
+{{end}}
+
+Methods: **{{.MethodCount}}** ({{.PublicMethodCount}} public, {{.PrivateMethodCount}} private)
+{{range .EmbeddedTypes}}
+- Embeds {{code .}}
+{{end}}{{range .Methods}}
+- {{code .Declaration}} — {{if .Exported}}public{{else}}private{{end}}; {{code .File}}:{{.Line}}
+{{end}}{{end}}
+### Interfaces
+{{if not .Interfaces}}
+None.
+{{end}}{{range .Interfaces}}
+#### {{heading .Name}}
+
+Defined at {{code .File}}:{{.Line}}
+
+Methods: **{{.MethodCount}}**
+{{range .EmbeddedTypes}}
+- Embeds / constrains {{code .}}
+{{end}}{{range .Methods}}
+- {{code .Declaration}} — {{code .File}}:{{.Line}}
+{{end}}{{end}}
+### All named types and aliases
+{{range .Types}}
+- {{code .Declaration}} — {{code .File}}:{{.Line}}
+{{range .TypeParameters}}  - Type parameter {{code .Name}}: {{code .Type}}
+{{end}}{{range .References}}  - References {{if .Package}}{{code .Package}}.{{end}}{{code .Name}} ({{code .Relation}})
+{{end}}{{end}}
+### Functions and signatures
+{{range .Functions}}
+- {{code .Declaration}} — {{code .Kind}}; {{code .File}}:{{.Line}}
+{{range .TypeParameters}}  - Type parameter {{code .Name}}: {{code .Type}}
+{{end}}{{range .Parameters}}  - Parameter {{.Position}} {{code .Name}}: {{code .Type}}{{if .Variadic}} (variadic){{end}}
+{{end}}{{range .Results}}  - Result {{.Position}} {{code .Name}}: {{code .Type}}
+{{end}}{{end}}
+### Package constants and variables
+{{range .Values}}
+- {{code .Declaration}} — {{code .Name}}; {{code .File}}:{{.Line}}{{if .Inherited}} (inherited const expression){{end}}
+{{if .Initializer}}  - Initializer: {{code .Initializer}}
+{{end}}{{end}}
+{{end}}
