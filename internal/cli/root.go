@@ -4,6 +4,7 @@ package cli
 import (
 	"errors"
 	"fmt"
+	"os"
 	"strings"
 	"unicode"
 
@@ -90,7 +91,7 @@ func NewCommand() (*cobra.Command, error) {
 		return nil, fmt.Errorf("register format completion: %w", err)
 	}
 
-	command.AddCommand(newQueryCommand(opts))
+	command.AddCommand(newQueryCommand(opts), newSkillCommand(os.UserHomeDir))
 
 	return command, nil
 }

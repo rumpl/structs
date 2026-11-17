@@ -39,6 +39,16 @@ structs ./types.go ./methods.go
 structs --include-tests .
 ```
 
+## Agent skill
+
+Install the bundled CLI guide and SQL schema for your agents:
+
+```sh
+structs skill install
+```
+
+This writes `$HOME/.agents/skills/structs/SKILL.md` without downloading anything. Reinstalling the same version leaves the file unchanged. A different existing skill is preserved; back it up and remove it before installing the bundled version.
+
 ## Reports
 
 ```sh
