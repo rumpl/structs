@@ -6,17 +6,13 @@ Find large structs, inspect function signatures, locate fields by type, and see 
 
 ## Install
 
-Requires Go 1.22 or later. From this checkout:
+Requires Go 1.22 or later.
 
 ```sh
-go build -o bin/structs ./cmd/structs
-mkdir -p ~/bin
-ln -s "$PWD/bin/structs" ~/bin/structs
+go install github.com/rumpl/structs/cmd/structs@latest
 ```
 
-Make sure `~/bin` is on your PATH.
-
-If you have [Task](https://taskfile.dev) installed, run `task install` instead.
+Make sure Go's binary directory (`$GOBIN`, or `$(go env GOPATH)/bin` when unset) is on your PATH.
 
 ## Quick start
 
