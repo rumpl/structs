@@ -9,7 +9,7 @@ Use this CLI for syntax-based codebase exploration without building the target o
 
 ## Executable and invocation
 
-Locate the executable with `command -v structs`. If it is not on PATH, check `~/bin/structs` or ask for its installed location. To build from a source checkout, run `go build -o bin/structs ./cmd/structs` in that checkout, not the target repository. Requires Go 1.22+, no CGO.
+Locate the executable with `command -v structs`. If it is not on PATH, check `~/bin/structs` or ask for its installed location. To build from a source checkout, run `go build -o bin/structs ./cmd/structs` in that checkout, not the target repository. Requires Go 1.27+, no CGO.
 
 This skill is bundled with the binary. Install it with `structs skill install`; it writes `$HOME/.agents/skills/structs/SKILL.md`. An identical existing skill is left unchanged. A different existing file is preserved: back it up and remove it before installing the bundled version.
 

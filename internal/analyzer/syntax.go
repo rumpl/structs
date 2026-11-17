@@ -25,7 +25,7 @@ func definitionOf(fset *token.FileSet, name *ast.Ident) report.Definition {
 
 func methodOf(function *report.Function) report.Method {
 	return report.Method{
-		MethodDeclaration:   report.MethodDeclaration{Name: function.Name, Declaration: function.Declaration, File: function.File},
+		Name: function.Name, Declaration: function.Declaration, File: function.File,
 		Line:                function.Line,
 		Exported:            function.Exported,
 		Signature:           function.Signature,

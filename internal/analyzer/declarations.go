@@ -32,8 +32,8 @@ func (c *fileCollector) visitFunction(decl *ast.FuncDecl) {
 	}
 
 	function := report.Function{
-		Definition:          definitionOf(c.fset, decl.Name),
-		FunctionDeclaration: report.FunctionDeclaration{Kind: kind, Declaration: c.format(&syntax)},
+		Definition: definitionOf(c.fset, decl.Name),
+		Kind:       kind, Declaration: c.format(&syntax),
 		Exported:            ast.IsExported(decl.Name.Name),
 		Signature:           c.signatureOf(decl.Recv),
 		SignatureParameters: c.signatureParameters(decl.Type),
@@ -118,8 +118,8 @@ func (c *fileCollector) visitInterface(body *ast.InterfaceType, owner *collected
 		declaration := strings.TrimPrefix(c.format(typ), "func")
 		for _, name := range field.Names {
 			function := report.Function{
-				Definition:          definitionOf(c.fset, name),
-				FunctionDeclaration: report.FunctionDeclaration{Kind: "interface_method", Declaration: name.Name + declaration},
+				Definition: definitionOf(c.fset, name),
+				Kind:       "interface_method", Declaration: name.Name + declaration,
 				Exported:            ast.IsExported(name.Name),
 				Signature:           signature,
 				SignatureParameters: parameters,

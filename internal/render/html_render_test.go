@@ -17,7 +17,7 @@ func TestParallelHTMLIsDeterministic(t *testing.T) {
 	for _, name := range []string{"alpha", "beta", "gamma"} {
 		data.Packages = append(data.Packages, report.Package{
 			Name: name, Directory: "/sample/" + name,
-			Structs: []report.Struct{{Definition: report.Definition{Name: "Box", File: "/sample/" + name + "/types.go"}}},
+			Structs: []report.Struct{{Name: "Box", File: "/sample/" + name + "/types.go"}},
 		})
 	}
 

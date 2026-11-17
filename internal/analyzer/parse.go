@@ -32,14 +32,11 @@ func collectFilesWithWorkers(paths []string, workers int) []fileResult {
 
 	var group sync.WaitGroup
 	for range workers {
-		group.Add(1)
-		go func() {
-			defer group.Done()
-
+		group.Go(func() {
 			for index := range jobs {
 				results[index] = collectFile(paths[index])
 			}
-		}()
+		})
 	}
 
 	for i := range paths {

@@ -116,7 +116,8 @@ for (const width of [1440, 390]) {
     checkInBrowser(`
       const signature = document.querySelector('#struct-0-0 code.function-signature');
       check(signature.textContent.startsWith('func UniqueMethod(') && !signature.textContent.includes('(Box)'), 'receiver omitted');
-      check(getComputedStyle(signature).whiteSpace === 'nowrap' && signature.getBoundingClientRect().height < 30, 'single line');
+      check(getComputedStyle(signature).whiteSpace === 'nowrap', 'signature does not wrap');
+      check(signature.clientHeight <= parseFloat(getComputedStyle(signature).lineHeight) + 1, 'single line of text excluding scrollbar');
       check(signature.scrollWidth > signature.clientWidth && getComputedStyle(signature).overflowX === 'auto', 'signature scrolling');
       if (window.innerWidth >= 1000) check(document.getElementById('toc').getBoundingClientRect().width >= 360, 'sidebar width');
       const name = document.querySelector('.tree-name');

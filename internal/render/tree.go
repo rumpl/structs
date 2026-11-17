@@ -68,7 +68,7 @@ func sourceTree(sections []htmlSection) (*treeNode, error) {
 			node := root
 
 			if relative != "." {
-				for _, component := range strings.Split(relative, string(filepath.Separator)) {
+				for component := range strings.SplitSeq(relative, string(filepath.Separator)) {
 					node = node.child(component, "directory", filepath.Join(node.Path, component))
 				}
 			}

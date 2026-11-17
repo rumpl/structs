@@ -6,7 +6,7 @@ Find large structs, inspect function signatures, locate fields by type, and see 
 
 ## Install
 
-Requires Go 1.22 or later.
+Requires Go 1.27 or later.
 
 ```sh
 go install github.com/rumpl/structs/cmd/structs@latest
@@ -210,7 +210,7 @@ task lint:rubocop    # Run every cop from rubocop-go v1.3.0.
 task lint:golangci   # Run golangci-lint v2.15.0.
 ```
 
-Linting requires Go 1.26.1 or later, or automatic Go toolchain downloads enabled. The pinned linters are downloaded on their first run. All 48 cops are enabled in `.rubocop-go.yml`; individual Go-version requirements still apply. Offenses and skipped whole-program analysis fail the task.
+Linting uses the project's Go 1.27 toolchain. The pinned linters are downloaded on their first run. All 48 cops are enabled in `.rubocop-go.yml`; individual Go-version requirements still apply. Offenses and skipped whole-program analysis fail the task.
 
 `.golangci.yml` enables all golangci-lint linters except deprecated duplicates, `depguard` (no project import allowlist is defined), and `noinlineerr` (inline error handling is allowed). JSON tags are checked against the existing snake_case naming convention. It includes tests and generated files, enables additional vet/staticcheck/gocritic checks, and reports issues without per-linter limits or blanket exclusions. The broad configuration currently reports an existing lint backlog; `task lint` fails until those findings are addressed.
 

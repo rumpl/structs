@@ -24,11 +24,11 @@ func fixture() report.Report {
 		Name: "sample", Directory: "/tmp/<script>alert(1)</script>",
 		Dependencies: []string{fixtureContext}, Imports: []report.Import{{Path: fixtureContext, Alias: "ctx", File: fixtureFile, Line: 2}},
 		Structs: []report.Struct{{
-			Definition: report.Definition{Name: fixtureStruct, File: fixtureFile, Line: 3}, FieldCount: 1, MethodCount: 1, PublicMethodCount: 1,
+			Name: fixtureStruct, File: fixtureFile, Line: 3, FieldCount: 1, MethodCount: 1, PublicMethodCount: 1,
 			Fields:  []report.Field{{Name: "Ctx", Type: "ctx.Context", TypeName: "Context", TypePackage: fixtureContext, Tag: `json:"ctx"`, File: fixtureFile, Line: 4, Exported: true}},
-			Methods: []report.Method{{MethodDeclaration: report.MethodDeclaration{Name: "Get", Declaration: "func (b Box[T]) Get() T"}, Exported: true}},
+			Methods: []report.Method{{Name: "Get", Declaration: "func (b Box[T]) Get() T", Exported: true}},
 		}},
-		Interfaces: []report.Interface{{Definition: report.Definition{Name: "Reader", File: fixtureFile, Line: 7}, MethodCount: 1, Methods: []report.Method{{MethodDeclaration: report.MethodDeclaration{Name: "Read", Declaration: "Read([]byte) error"}}}}},
+		Interfaces: []report.Interface{{Name: "Reader", File: fixtureFile, Line: 7, MethodCount: 1, Methods: []report.Method{{Name: "Read", Declaration: "Read([]byte) error"}}}},
 	}}}
 }
 

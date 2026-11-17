@@ -20,7 +20,7 @@ func TestReferenceBatchesPreserveOrderAndOwners(t *testing.T) {
 		t.Run(strconv.Itoa(count), func(t *testing.T) {
 			t.Parallel()
 
-			typ := report.NamedType{Definition: report.Definition{Name: "T"}, Kind: report.KindNamed}
+			typ := report.NamedType{Name: "T", Kind: report.KindNamed}
 
 			want := make([][]any, 0, count)
 			for i := range count {

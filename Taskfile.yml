@@ -54,7 +54,7 @@ tasks:
       - go run github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.15.0 run --config '{{.TASKFILE_DIR}}/.golangci.yml' ./...
 
   lint:rubocop:
-    desc: Run all rubocop-go v1.3.0 cops (requires Go 1.26.1+)
+    desc: Run all rubocop-go v1.3.0 cops
     cmds:
       - |
         set -eu

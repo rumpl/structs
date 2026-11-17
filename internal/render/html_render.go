@@ -86,10 +86,7 @@ func renderFragments(html *template.Template, jobs []htmlFragment, workers int) 
 	queue := make(chan int)
 
 	for range workers {
-		group.Add(1)
-		go func() {
-			defer group.Done()
-
+		group.Go(func() {
 			for index := range queue {
 				job := &jobs[index]
 
@@ -98,7 +95,7 @@ func renderFragments(html *template.Template, jobs []htmlFragment, workers int) 
 					*job.output = fragment
 				}
 			}
-		}()
+		})
 	}
 
 	for i := range jobs {

@@ -19,9 +19,9 @@ func treeFixture(t *testing.T) *treeNode {
 	t.Helper()
 
 	data := report.Report{Packages: []report.Package{
-		{Name: "main", Directory: "/repo/cmd/tool", Structs: []report.Struct{{Definition: report.Definition{Name: "Options", File: "/repo/cmd/tool/main.go"}}}},
-		{Name: treeClientPackage, Directory: "/repo/internal/client", Structs: []report.Struct{{Definition: report.Definition{Name: treeClientType, File: "/repo/internal/client/client.go"}}}, Interfaces: []report.Interface{{Definition: report.Definition{Name: "Transport", File: "/repo/internal/client/client.go"}}}},
-		{Name: "client_test", Directory: "/repo/internal/client", Structs: []report.Struct{{Definition: report.Definition{Name: treeClientType, File: "/repo/internal/client/client_test.go"}}}},
+		{Name: "main", Directory: "/repo/cmd/tool", Structs: []report.Struct{{Name: "Options", File: "/repo/cmd/tool/main.go"}}},
+		{Name: treeClientPackage, Directory: "/repo/internal/client", Structs: []report.Struct{{Name: treeClientType, File: "/repo/internal/client/client.go"}}, Interfaces: []report.Interface{{Name: "Transport", File: "/repo/internal/client/client.go"}}},
+		{Name: "client_test", Directory: "/repo/internal/client", Structs: []report.Struct{{Name: treeClientType, File: "/repo/internal/client/client_test.go"}}},
 	}}
 	view, err := htmlData(data)
 	require.NoError(t, err)
@@ -84,7 +84,7 @@ func TestSourceTreeCommonDirectory(t *testing.T) {
 
 			section := htmlSection{Kind: report.KindStruct}
 			for _, dir := range test.dirs {
-				section.Packages = append(section.Packages, htmlPackage{Directory: dir, Types: []htmlType{{Definition: report.Definition{Name: "T", File: dir + "/types.go"}}}})
+				section.Packages = append(section.Packages, htmlPackage{Directory: dir, Types: []htmlType{{Name: "T", File: dir + "/types.go"}}})
 			}
 
 			tree, err := sourceTree([]htmlSection{section})

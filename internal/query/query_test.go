@@ -22,10 +22,10 @@ func sample() report.Report {
 	return report.Report{Packages: []report.Package{{
 		Name: samplePackage, Directory: "/sample",
 		Structs: []report.Struct{{
-			Definition: report.Definition{Name: sampleStruct, File: "/sample/types.go", Line: 2}, FieldCount: 3, MethodCount: 2, PublicMethodCount: 1, PrivateMethodCount: 1,
-			Methods: []report.Method{{MethodDeclaration: report.MethodDeclaration{Name: "Get", Declaration: "func (Box) Get() int"}, Exported: true}, {MethodDeclaration: report.MethodDeclaration{Name: "hidden"}}}, EmbeddedTypes: []string{"Base"},
+			Name: sampleStruct, File: "/sample/types.go", Line: 2, FieldCount: 3, MethodCount: 2, PublicMethodCount: 1, PrivateMethodCount: 1,
+			Methods: []report.Method{{Name: "Get", Declaration: "func (Box) Get() int", Exported: true}, {Name: "hidden"}}, EmbeddedTypes: []string{"Base"},
 		}},
-		Interfaces: []report.Interface{{Definition: report.Definition{Name: sampleInterface}, MethodCount: 1, Methods: []report.Method{{MethodDeclaration: report.MethodDeclaration{Name: readMethod}, Exported: true}}, EmbeddedTypes: []string{"io.Closer"}}},
+		Interfaces: []report.Interface{{Name: sampleInterface, MethodCount: 1, Methods: []report.Method{{Name: readMethod, Exported: true}}, EmbeddedTypes: []string{"io.Closer"}}},
 	}}}
 }
 
